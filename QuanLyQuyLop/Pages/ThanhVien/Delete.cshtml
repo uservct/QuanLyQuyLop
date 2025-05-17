@@ -1,0 +1,25 @@
+﻿@page
+@using System.Data.SqlClient;
+@{
+	try
+	{
+		string id = Request.Query["id"];
+		string connectionString = "Data Source=localhost\\sqlexpress;Initial Catalog=QuanLyQuyLop;Integrated Security=True;Pooling=False;TrustServerCertificate=True";
+		using (SqlConnection connection = new SqlConnection(connectionString))
+		{
+			connection.Open();
+			string sql = "DELETE from ThanhVien WHERE id=@id";
+			using (SqlCommand command = new SqlCommand(sql, connection))
+			{
+				command.Parameters.AddWithValue("@id", id);
+				command.ExecuteNonQuery();
+			}
+		}
+	}
+	catch (Exception ex)
+	{
+		Console.WriteLine(ex.ToString());
+		throw;
+	}
+	Response.Redirect("/ThanhVien");//sau khi delete thành công 1 row thì redirect về trang /thanhvien/index
+}

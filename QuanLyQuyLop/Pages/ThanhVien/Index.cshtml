@@ -1,0 +1,44 @@
+﻿@page
+@model QuanLyQuyLop.Pages.ThanhVien.IndexModel
+@{
+    ViewData["Title"] = "Thành Viên";
+}
+<br />
+
+<h2>Danh sách thành viên 22CDP</h2>
+<form method="get" class="mb-3">
+    <input type="text" name="searchTV" class="form-control d-inline w-50"
+           placeholder="Tìm kiếm theo tên hoặc MSV" value="@Request.Query["searchTV"]" />
+    <button type="submit" class="btn btn-primary ms-2">Tìm kiếm</button>
+</form>
+
+<a href="/ThanhVien/Create">Thêm thành viên</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Mã sinh viên</th>
+            <th>Họ Tên</th>
+            <th>Ghi Chú</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    @{
+        int stt = 1;
+    }
+    @foreach (var item in Model.listThanhVien)
+    {
+        <tr>
+            <td>@(stt++)</td>
+            <td>@item.MSV</td>
+            <td>@item.HoTen</td>
+            <td>@item.GhiChu</td>
+            <td>
+                <a class="btn btn-primary btn-sm" href="ThanhVien/Edit?id=@item.Id">Sửa</a>
+                <a class="btn btn-danger btn-sm" href="ThanhVien/Delete?id=@item.Id">Xóa</a>
+            </td>
+        </tr>
+    }
+    <tbody>
+    </tbody>
+</table>
