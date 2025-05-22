@@ -5,7 +5,7 @@
 }
 
 <br />
-<h2>Edit Client Information</h2>
+<h2>Sửa Thông Tin Thành Viên</h2>
 @* Kiểm tra xem có errorMessage không, nếu có thì hiển thị thông báo *@
 @if (Model.errorMessage.Length > 0)
 {
@@ -33,7 +33,7 @@
 	<div class="row mb-3">
 		<label class="col-sm3 col-form-label">Ghi Chú</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="ghichu" value="@Model.thanhVienInfo.GhiChu">
+			 <textarea class="form-control" name="ghichu" rows="3">@Model.thanhVienInfo.GhiChu</textarea>
 		</div>
 	</div>
 

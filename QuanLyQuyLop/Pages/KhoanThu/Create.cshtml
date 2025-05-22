@@ -1,0 +1,61 @@
+﻿@page
+@model QuanLyQuyLop.Pages.KhoanThu.CreateModel
+@{
+    ViewData["title"] = "Thêm khoản thu";
+}
+
+<br />
+<h2>Thêm Khoản Thu</h2>
+@* Kiểm tra xem có errorMessage không, nếu có thì hiển thị thông báo *@
+@if (Model.errorMessage.Length > 0)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>@Model.errorMessage</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" arialabel="
+                Close"></button>
+    </div>
+}
+@*Form submit dữ liệu*@
+<form method="post">
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label align-self-center">Tên Khoản Thu</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="tenkhoanthu" value="@Model.khoanThuInfo.TenKhoanThu">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label align-self-center">Số Tiền</label>
+        <div class="col-sm-6">
+            <input type="number" class="form-control" name="sotien" value="@Model.khoanThuInfo.SoTien">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label align-self-center">Ngày Tạo</label>
+        <div class="col-sm-6">
+            <input type="date" class="form-control" name="ngaytao" value="@Model.khoanThuInfo.NgayTao" readonly>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label align-self-center">Hạn Nộp</label>
+        <div class="col-sm-6">
+            <input type="date" class="form-control" name="hannop" value="@Model.khoanThuInfo.HanNop">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label align-self-center">Ghi Chú</label>
+        <div class="col-sm-6">
+            <textarea class="form-control" name="ghichu" rows="3">@Model.khoanThuInfo.GhiChu</textarea>
+        </div>
+    </div>
+
+    @*button submit và cancel*@
+    <div class="row mb-3">
+        <div class="col-sm-3 d-grid">
+            <button type="submit" class="btn btn-primary">Xác Nhận</button>
+        </div>
+        <div class="col-sm-3 d-grid">
+            <a class="btn btn-outline-primary" href="/KhoanThu" role="button">Hủy</a>
+            @*Cancel thì trở về trang /KhoanThu/index*@
+        </div>
+    </div>
+</form>

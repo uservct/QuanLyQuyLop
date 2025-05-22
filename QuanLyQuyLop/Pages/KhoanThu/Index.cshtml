@@ -6,6 +6,11 @@
 <br />
 
 <h2>Danh sách khoản thu</h2>
+<form method="get" class="mb-3">
+    <input type="text" name="searchKT" class="form-control d-inline w-50"
+           placeholder="Tìm kiếm theo tên khoản thu" value="@Request.Query["searchKT"]" />
+    <button type="submit" class="btn btn-primary ms-2">Tìm kiếm</button>
+</form>
 <a href="KhoanThu/Create">Thêm khoản thu</a>
 <table class="table">
     <thead>
@@ -19,3 +24,24 @@
             <th>Thao tác</th>
         </tr>
     </thead>
+    @{
+        int stt = 1;
+    }
+    @foreach (var item in Model.listKhoanThu)
+    {
+        <tr>
+            <td>@(stt++)</td>
+            <td>@item.TenKhoanThu</td>
+            <td>@item.SoTien</td>
+            <td>@item.NgayTao</td>
+			<td>@item.HanNop</td>
+			<td>@item.GhiChu</td>
+            <td>
+                <a class="btn btn-info btn-sm" href="KhoanThu/Details?id=@item.Id">Chi tiết</a>
+                
+            </td>
+        </tr>
+    }
+    <tbody>
+    </tbody>
+</table>

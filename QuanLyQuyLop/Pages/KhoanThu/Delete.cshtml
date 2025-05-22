@@ -1,4 +1,4 @@
-﻿@page
+@page
 @using Microsoft.Data.SqlClient;
 @{
 	try
@@ -8,7 +8,7 @@
 		using (SqlConnection connection = new SqlConnection(connectionString))
 		{
 			connection.Open();
-			string sql = "DELETE from ThanhVien WHERE id=@id";
+			string sql = "DELETE from KhoanThu WHERE id=@id";
 			using (SqlCommand command = new SqlCommand(sql, connection))
 			{
 				command.Parameters.AddWithValue("@id", id);
@@ -21,5 +21,5 @@
 		Console.WriteLine(ex.ToString());
 		throw;
 	}
-	Response.Redirect("/ThanhVien");//sau khi delete thành công 1 row thì redirect về trang /thanhvien/index
+	Response.Redirect("/KhoanThu");
 }

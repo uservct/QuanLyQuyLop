@@ -35,7 +35,7 @@
             <td>@item.GhiChu</td>
             <td>
                 <a class="btn btn-primary btn-sm" href="ThanhVien/Edit?id=@item.Id">Sửa</a>
-                <a class="btn btn-danger btn-sm" href="ThanhVien/Delete?id=@item.Id">Xóa</a>
+                <a class="btn btn-danger btn-sm" href="ThanhVien/Delete?id=@item.Id" onclick="return confirm('Bạn có chắc chắn muốn xóa thành viên này không?');">Xóa</a>
             </td>
         </tr>
     }

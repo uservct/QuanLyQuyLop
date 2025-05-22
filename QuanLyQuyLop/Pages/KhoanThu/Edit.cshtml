@@ -1,0 +1,64 @@
+﻿@page
+@model QuanLyQuyLop.Pages.KhoanThu.EditModel
+@{
+    ViewData["title"] = "Sửa khoản thu";
+}
+
+<br />
+<h2>Sửa Thông Tin Khoản Thu</h2>
+
+@if (Model.errorMessage.Length > 0)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>@Model.errorMessage</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@*Form để hiển thị và edit dữ liệu*@
+<form method="post">
+    <input type="hidden" name="id" value="@Model.khoanThuInfo.Id" />
+    
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label align-self-center">Tên Khoản Thu</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="tenkhoanthu" value="@Model.khoanThuInfo.TenKhoanThu" required>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label align-self-center">Số Tiền</label>
+        <div class="col-sm-6">
+            <input type="number" class="form-control" name="sotien" value="@Model.khoanThuInfo.SoTien" min="1" required>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label align-self-center">Ngày Tạo</label>
+        <div class="col-sm-6">
+            <input type="date" class="form-control" value="@Model.khoanThuInfo.NgayTao" disabled>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label align-self-center">Hạn Nộp</label>
+        <div class="col-sm-6">
+            <input type="date" class="form-control" name="hannop" value="@Model.khoanThuInfo.HanNop" required>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label align-self-center">Ghi Chú</label>
+        <div class="col-sm-6">
+            <textarea class="form-control" name="ghichu" rows="3">@Model.khoanThuInfo.GhiChu</textarea>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-3 d-grid">
+            <button type="submit" class="btn btn-primary">Xác Nhận</button>
+        </div>
+        <div class="col-sm-3 d-grid">
+            <a class="btn btn-outline-primary" href="/KhoanThu/Details?id=@Model.khoanThuInfo.Id" role="button">Hủy</a>
+        </div>
+    </div>
+</form>

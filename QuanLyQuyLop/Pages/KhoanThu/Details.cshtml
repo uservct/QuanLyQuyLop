@@ -1,0 +1,37 @@
+﻿@page
+@model QuanLyQuyLop.Pages.KhoanThu.DetailsModel
+@{
+    ViewData["Title"] = "Chi Tiết khoản thu";
+}
+<h2>Chi Tiết Khoản Thu</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Tên Khoản Thu</th>
+        <td>@Model.khoanThuInfo.TenKhoanThu</td>
+    </tr>
+    <tr>
+        <th>Số Tiền</th>
+        <td>@Model.khoanThuInfo.SoTien</td>
+    </tr>
+    <tr>
+        <th>Ngày Tạo</th>
+        <td>@Model.khoanThuInfo.NgayTao</td>
+    </tr>
+    <tr>
+        <th>Hạn Nộp</th>
+        <td>@Model.khoanThuInfo.HanNop</td>
+    </tr>
+    <tr>
+        <th>Ghi Chú</th>
+        <td>@Model.khoanThuInfo.GhiChu</td>
+    </tr>
+</table>
+<div class="mt-3">
+    <a class="btn btn-primary" href="/KhoanThu/Edit?id=@Model.khoanThuInfo.Id">Sửa</a>
+    <a class="btn btn-danger"
+       href="/KhoanThu/Delete?id=@Model.khoanThuInfo.Id"
+       onclick="return confirm('Bạn có chắc chắn muốn xóa khoản thu này không?');">Xóa</a>
+</div>
+<br>
+    <a class="btn btn-secondary" href="/KhoanThu">Quay lại</a>
