@@ -2,6 +2,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using QuanLyQuyLop.Pages.ThanhVien;
 
 namespace QuanLyQuyLop.Pages.KhoanThu
 {
@@ -46,7 +47,11 @@ namespace QuanLyQuyLop.Pages.KhoanThu
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    string sql = "INSERT INTO KhoanThu" + "(TenKhoanThu, SoTien, NgayTao, HanNop, GhiChu) VALUES " + "(@tenkhoanthu, @sotien, @ngaytao, @hannop, @ghichu);";
+                    // thêm khoản thu
+                    string sql = "INSERT INTO KhoanThu" + "(TenKhoanThu, SoTien, NgayTao, HanNop, GhiChu) VALUES " + "(@tenkhoanthu, @sotien, @ngaytao, @hannop, @ghichu);"
+                                    + " SELECT SCOPE_IDENTITY();"; // Lấy Id mới thêm"
+
+                    int idKhoanThuMoi = 0;
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
                         command.Parameters.AddWithValue("@tenkhoanthu", khoanThuInfo.TenKhoanThu);
@@ -55,7 +60,38 @@ namespace QuanLyQuyLop.Pages.KhoanThu
                         command.Parameters.AddWithValue("@hannop", khoanThuInfo.HanNop);
                         command.Parameters.AddWithValue("@ghichu", khoanThuInfo.GhiChu);
 
-                        command.ExecuteNonQuery();
+                        // command.ExecuteNonQuery();
+
+                        object result = command.ExecuteScalar(); //executeScalar trả về giá trị đầu tiên của cột đầu tiên trong kết quả truy vấn
+                        if (result != null)
+                        {
+                            idKhoanThuMoi = Convert.ToInt32(result);
+                        }
+                    }
+                    // lấy danh sách tv
+                    List<int> listThanhVien = new List<int>();
+                    string sqlTV = "SELECT Id FROM ThanhVien";
+
+                    using (SqlCommand command = new SqlCommand(sqlTV, connection))
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            listThanhVien.Add(reader.GetInt32(0));
+                        }
+                    }
+                    // tạo ChiTietThu cho mỗi thành viên
+                    foreach (int thanhVienId in listThanhVien)
+                    {
+                        string sqlCTT = @"INSERT INTO ChiTietThu (KhoanThuId, ThanhVienId, DaNop)
+                                        VALUES (@idKhoanThuMoi, @thanhVienId, 0)";
+
+                        using (SqlCommand cmdInsert = new SqlCommand(sqlCTT, connection))
+                        {
+                            cmdInsert.Parameters.AddWithValue("@idKhoanThuMoi", idKhoanThuMoi);
+                            cmdInsert.Parameters.AddWithValue("@thanhVienId", thanhVienId);
+                            cmdInsert.ExecuteNonQuery();
+                        }
                     }
                 }
             }

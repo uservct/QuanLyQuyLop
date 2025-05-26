@@ -8,7 +8,7 @@
 		using (SqlConnection connection = new SqlConnection(connectionString))
 		{
 			connection.Open();
-			string sql = "DELETE from KhoanThu WHERE id=@id";
+			string sql = "DELETE FROM ChiTietThu WHERE KhoanThuId = @id;"+ "DELETE from KhoanThu WHERE id=@id";
 			using (SqlCommand command = new SqlCommand(sql, connection))
 			{
 				command.Parameters.AddWithValue("@id", id);

@@ -1,37 +1,119 @@
 ﻿@page
 @model QuanLyQuyLop.Pages.KhoanThu.DetailsModel
 @{
-    ViewData["Title"] = "Chi Tiết khoản thu";
+    ViewData["Title"] = "Chi Tiết Khoản Thu";
 }
 <h2>Chi Tiết Khoản Thu</h2>
 
-<table class="table table-bordered">
-    <tr>
-        <th>Tên Khoản Thu</th>
-        <td>@Model.khoanThuInfo.TenKhoanThu</td>
-    </tr>
-    <tr>
-        <th>Số Tiền</th>
-        <td>@Model.khoanThuInfo.SoTien</td>
-    </tr>
-    <tr>
-        <th>Ngày Tạo</th>
-        <td>@Model.khoanThuInfo.NgayTao</td>
-    </tr>
-    <tr>
-        <th>Hạn Nộp</th>
-        <td>@Model.khoanThuInfo.HanNop</td>
-    </tr>
-    <tr>
-        <th>Ghi Chú</th>
-        <td>@Model.khoanThuInfo.GhiChu</td>
-    </tr>
-</table>
-<div class="mt-3">
-    <a class="btn btn-primary" href="/KhoanThu/Edit?id=@Model.khoanThuInfo.Id">Sửa</a>
-    <a class="btn btn-danger"
-       href="/KhoanThu/Delete?id=@Model.khoanThuInfo.Id"
-       onclick="return confirm('Bạn có chắc chắn muốn xóa khoản thu này không?');">Xóa</a>
+@* @if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+} *@
+<div class="card shadow-sm border rounded p-4 bg-white">
+    <table class="table">
+        <tr>
+            <th style="width: 200px;">Tên Khoản Thu</th>
+            <td>@Model.khoanThuInfo.TenKhoanThu</td>
+        </tr>
+        <tr>
+            <th>Số Tiền</th>
+            <td>@Model.khoanThuInfo.SoTien.ToString() đồng</td>
+        </tr>
+        <tr>
+            <th>Ngày Tạo</th>
+            <td>@Model.khoanThuInfo.NgayTao</td>
+        </tr>
+        <tr>
+            <th>Hạn Nộp</th>
+            <td>@Model.khoanThuInfo.HanNop</td>
+        </tr>
+        <tr>
+            <th>Ghi Chú</th>
+            <td>@Model.khoanThuInfo.GhiChu</td>
+        </tr>
+    </table>
+
+    <div class="mt-4">
+        <a class="btn btn-primary me-2" href="/KhoanThu/Edit?id=@Model.khoanThuInfo.Id">Sửa</a>
+        <a class="btn btn-danger" href="/KhoanThu/Delete?id=@Model.khoanThuInfo.Id"
+            onclick="return confirm('Bạn có chắc chắn muốn xóa khoản thu này không?');">Xóa</a>
+    </div>
 </div>
 <br>
-    <a class="btn btn-secondary" href="/KhoanThu">Quay lại</a>
+<h3>Danh Sách Thành Viên</h3>
+<div class="d-flex gap-2 mb-3">
+    <input type="text" id="searchInput" class="form-control" placeholder="Tìm tên/MSV" />
+    <select id="filterDaNop" class="form-select" style="max-width: 160px;">
+        <option value="all">Tất cả</option>
+        <option value="true">Đã nộp</option>
+        <option value="false">Chưa nộp</option>
+    </select>
+</div>
+
+<form method="post" onsubmit="return confirm('Bạn có chắc chắn muốn lưu thay đổi này?');">
+    <input type="hidden" name="id" value="@Model.khoanThuInfo.Id" />
+    <table class="table table-bordered mt-3" id="thanhVienTable">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Mã Sinh Viên</th>
+                <th>Họ Tên</th>
+                <th>Ghi Chú</th>
+                <th>Đã Nộp</th>
+            </tr>
+        </thead>
+        @{
+            int stt = 1;
+        }
+        <tbody>
+            @foreach (var item in Model.listChiTietThu)
+            {
+                <tr>
+                    <td>@(stt++)</td>
+                    <td>@item.MaSV</td>
+                    <td>@item.HoTen</td>
+                    <td>
+                        <input type="text" class="form-control border-0" name="ghiChu[@item.Id]" value="@item.GhiChu" />
+                    </td>
+                    <td>
+                        <input type="checkbox" name="daNop[@item.Id]" value="true" @(item.DaNop ? "checked" : "") />
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+    <button type="submit" class="btn btn-success">Lưu trạng thái</button>
+</form>
+<br>
+<a class="btn btn-secondary" href="/KhoanThu">Quay lại</a>
+
+<script>
+    const searchInput = document.getElementById("searchInput");
+    const filterDaNop = document.getElementById("filterDaNop");
+
+    function filterRows() {
+        const keyword = searchInput.value.toLowerCase();
+        const filter = filterDaNop.value;
+        // Lấy tất cả các hàng trong bảng
+        const rows = document.querySelectorAll("#thanhVienTable tbody tr"); 
+        // Duyệt qua từng hàng và kiểm tra điều kiện lọc
+        rows.forEach(row => {
+            const msv = row.children[1].textContent.toLowerCase();
+            const hoTen = row.children[2].textContent.toLowerCase();
+            const checkbox = row.querySelector("input[type='checkbox']");
+            const daNop = checkbox.checked;
+
+            const matchText = msv.includes(keyword) || hoTen.includes(keyword);
+            const matchFilter = (filter === "all") || (filter === "true" && daNop) || (filter === "false" && !daNop);
+            // Hiển thị hoặc ẩn hàng dựa trên điều kiện lọc
+            row.style.display = (matchText && matchFilter) ? "" : "none";
+        });
+    }
+
+    searchInput.addEventListener("input", filterRows);
+    filterDaNop.addEventListener("change", filterRows);
+</script>
+
