@@ -5,8 +5,15 @@
 }
 <br />
 
-<h2>Danh sách khoản chi</h2>
-<a href="KhoanChi/Create">Thêm khoản chi</a>
+<h2>Danh Sách Khoản Chi</h2>
+<form method="get" class="mb-3">
+    <input type="text" name="searchKC" class="form-control d-inline w-50" placeholder="Tìm kiếm theo tên khoản chi"
+        value="@Request.Query["searchKC"]" />
+    <button type="submit" class="btn btn-primary ms-2">Tìm kiếm</button>
+</form>
+
+<a href="KhoanChi/Create" class="btn btn-success mb-3">Thêm khoản chi</a>
+
 <table class="table">
     <thead>
         <tr>
@@ -18,3 +25,25 @@
             <th>Thao tác</th>
         </tr>
     </thead>
+    <tbody>
+        @{
+            int stt = 1;
+            foreach (var item in Model.listKhoanChi)
+            {
+                <tr>
+                    <td>@stt</td>
+                    <td>@item.TenKhoanChi</td>
+                    <td>@item.SoTien.ToString("N0") VNĐ</td>
+                    <td>@item.NgayChi</td>
+                    <td>@item.GhiChu</td>
+                    <td>
+                        <a href="KhoanChi/Edit/?id=@item.Id" class="btn btn-primary btn-sm">Sửa</a>
+                        <a href="KhoanChi/Delete/?id=@item.Id" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</a>
+                    </td>
+                </tr>
+                stt++;
+            }
+        }
+    </tbody>
+</table>

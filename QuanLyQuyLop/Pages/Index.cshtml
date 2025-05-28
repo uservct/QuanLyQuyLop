@@ -6,5 +6,10 @@
 
 <div class="text-center">
     <h1 class="display-4"><b>QUẢN LÝ QUỸ LỚP 22CDP</b></h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h2>Thống kê tài chính</h2>
+    <div class="card p-3 mb-4">
+        <p><strong>Tổng số tiền đã thu:</strong> @Model.TongThu.ToString("N0") VNĐ</p>
+        <p><strong>Tổng số tiền đã chi:</strong> @Model.TongChi.ToString("N0") VNĐ</p>
+        <p><strong>Số dư còn lại:</strong> @Model.SoDu.ToString("N0") VNĐ</p>
+    </div>
 </div>

@@ -1,0 +1,55 @@
+﻿@page
+@model QuanLyQuyLop.Pages.KhoanChi.EditModel
+@{
+    ViewData["Title"] = "Sửa Khoản Chi";
+}
+<br />
+<h2>Thêm Khoản Chi</h2>
+@* Kiểm tra xem có errorMessage không, nếu có thì hiển thị thông báo *@
+@if (Model.errorMessage.Length > 0)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>@Model.errorMessage</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" arialabel="
+                                Close"></button>
+    </div>
+}
+@*Form submit dữ liệu*@
+<form method="post">
+    <input type="hidden" name="id" value="@Model.khoanChiInfo.Id" />
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label align-self-center">Tên Khoản Chi</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="tenkhoanchi" value="@Model.khoanChiInfo.TenKhoanChi">
+        </div>
+    </div>
+    <div class=" row mb-3">
+        <label class="col-sm-3 col-form-label align-self-center">Số Tiền</label>
+        <div class="col-sm-6">
+            <input type="number" class="form-control" name="sotien" value="@Model.khoanChiInfo.SoTien">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label align-self-center">Ngày Chi</label>
+        <div class="col-sm-6">
+            <input type="date" class="form-control" name="ngaychi" value="@Model.khoanChiInfo.NgayChi">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label align-self-center">Ghi Chú</label>
+        <div class="col-sm-6">
+            <textarea class="form-control" name="ghichu" rows="3">@Model.khoanChiInfo.GhiChu</textarea>
+        </div>
+    </div>
+
+    @*button submit và cancel*@
+    <div class="row mb-3">
+        <div class="col-sm-3 d-grid">
+            <button type="submit" class="btn btn-primary">Xác Nhận</button>
+        </div>
+        <div class="col-sm-3 d-grid">
+            <a class="btn btn-outline-primary" href="/KhoanChi" role="button">Hủy</a>
+            @*Cancel thì trở về trang /KhoanChi/index*@
+        </div>
+    </div>
+</form>
