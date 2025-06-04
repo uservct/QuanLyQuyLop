@@ -1,15 +1,196 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Homepage";
 }
 
-<div class="text-center">
-    <h1 class="display-4"><b>QUẢN LÝ QUỸ LỚP 22CDP</b></h1>
-    <h2>Thống kê tài chính</h2>
-    <div class="card p-3 mb-4">
-        <p><strong>Tổng số tiền đã thu:</strong> @Model.TongThu.ToString("N0") VNĐ</p>
-        <p><strong>Tổng số tiền đã chi:</strong> @Model.TongChi.ToString("N0") VNĐ</p>
-        <p><strong>Số dư còn lại:</strong> @Model.SoDu.ToString("N0") VNĐ</p>
+<div class="container mt-5">
+    <h1 class="text-center text-primary fw-bold mb-4">QUẢN LÝ QUỸ LỚP 22CDP</h1>
+
+    @if (!ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <div asp-validation-summary="All" class="text-danger"></div>
+        </div>
+    }
+
+    <!-- Form chọn thời gian báo cáo -->
+    <form method="get" class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-light">
+            <h4 class="mb-0 text-secondary">Thông tin chung</h4>
+        </div>
+        <div class="card-body row">
+            <div class="col-md-4 mb-3">
+                <label for="fromDate" class="form-label">Từ ngày</label>
+                <input type="date" id="fromDate" name="fromDate" class="form-control"
+                    value="@Model.FromDate?.ToString("yyyy-MM-dd")" />
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="toDate" class="form-label">Đến ngày</label>
+                <input type="date" id="toDate" name="toDate" class="form-control"
+                    value="@Model.ToDate?.ToString("yyyy-MM-dd")" />
+            </div>
+            <form method="post">
+                <div class="col-md-4 d-flex align-items-end mb-3">
+                    <div class="d-flex">
+                        <button type="submit" class="btn btn-primary" asp-page-handler="">Xem báo cáo</button>
+                        <button type="submit" class="btn btn-danger ms-2" asp-page-handler="ExportPdf">Xuất báo cáo
+                            PDF</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </form>
+
+    <!-- Tổng quan tài chính -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-light">
+            <h4 class="mb-0 text-success">Tổng Quan Tài Chính</h4>
+        </div>
+        <div class="card-body">
+            <div class="row text-center">
+                <div class="col-md-4 mb-3">
+                    <div class="bg-light p-3 rounded border-start border-success border-4">
+                        <h6 class="text-muted">Tổng số tiền đã thu</h6>
+                        <p class="fs-5 text-success fw-semibold">@Model.TongThu.ToString("N0") VNĐ</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="bg-light p-3 rounded border-start border-danger border-4">
+                        <h6 class="text-muted">Tổng số tiền đã chi</h6>
+                        <p class="fs-5 text-danger fw-semibold">@Model.TongChi.ToString("N0") VNĐ</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="bg-light p-3 rounded border-start border-info border-4">
+                        <h6 class="text-muted">Số dư còn lại</h6>
+                        <p class="fs-5 text-info fw-bold">@Model.SoDu.ToString("N0") VNĐ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chi tiết thu -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-light">
+            <h4 class="mb-0 text-primary">Các Khoản Thu</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên khoản thu</th>
+                            <th>Số tiền (VNĐ)</th>
+                            <th>Ngày tạo</th>
+                            <th>Hạn nộp</th>
+                            <th>Số người đã đóng</th>
+                            <th>Thành tiền (VNĐ)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int stt = 1;
+                            foreach (var item in Model.ChiTietThuReport)
+                            {
+                                <tr>
+                                    <td>@(stt++)</td>
+                                    <td>@item.TenKhoanThu</td>
+                                    <td class="text">@item.SoTien.ToString("N0")</td>
+                                    <td>@item.NgayTao.ToString("dd/MM/yyyy")</td>
+                                    <td>@item.HanNop.ToString("dd/MM/yyyy")</td>
+                                    <td class="text-center">@item.SoNguoiDaDong</td>
+                                    <td class="text">@item.ThanhTien.ToString("N0")</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chi tiết chi -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-light">
+            <h4 class="mb-0 text-danger">Các Khoản Chi</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên khoản chi</th>
+                            <th>Số tiền (VNĐ)</th>
+                            <th>Ngày chi</th>
+                            <th>Ghi chú</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int stt_chi = 1;
+                            foreach (var item in Model.khoanChiItem)
+                            {
+                                <tr>
+                                    <td>@(stt_chi++)</td>
+                                    <td>@item.TenKhoanChi</td>
+                                    <td class="text">@item.SoTien.ToString("N0")</td>
+                                    <td>@item.NgayChi.ToString("dd/MM/yyyy")</td>
+                                    <td>@item.GhiChu</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thành viên chưa nộp tiền -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-light">
+            <h4 class="mb-0 text-warning">Danh sách thành viên chưa đóng tiền</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>STT</th>
+                            <th>MSV</th>
+                            <th>Họ tên</th>
+                            <th>Khoản chưa đóng</th>
+                            <th>Tổng số tiền (VNĐ)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int stt_chuanop = 1;
+                            foreach (var tv in Model.thanhVienChuaNop)
+                            {
+                                <tr>
+                                    <td>@stt_chuanop</td>
+                                    <td>@tv.MSV</td>
+                                    <td>@tv.HoTen</td>
+                                    <td>
+                                        <ul class="mb-0 ps-3">
+                                            @foreach (var item in tv.khoanChuaNop)
+                                            {
+                                                <li>@item</li>
+                                            }
+                                        </ul>
+                                    </td>
+                                    <td>@tv.TongSoTien.ToString("N0")</td>
+                                </tr>
+                                stt_chuanop++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
